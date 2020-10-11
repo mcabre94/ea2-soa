@@ -1,0 +1,2 @@
+rootProject.name='EA2 SOA'
+include ':app'
