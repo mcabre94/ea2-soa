@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.example.ea2soa.data.LoginRepository;
-import com.example.ea2soa.data.model.LoggedInUser;
+import com.example.ea2soa.data.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView userText = findViewById(R.id.nombreUsuario);
 
-        LoggedInUser loggedInUser = LoginRepository.getInstance(null).getLoggedInUser();
+        User user = LoginRepository.getInstance(null).getLoggedInUser();
 
-        if(loggedInUser != null){
-            userText.setText(loggedInUser.getDisplayName());
+        if(user != null){
+//            userText.setText();
         }
     }
 }
