@@ -1,4 +1,4 @@
-package com.example.ea2soa;
+package com.example.ea2soa.ui.register;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,12 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.example.ea2soa.R;
 import com.example.ea2soa.data.RegisterService;
 import com.example.ea2soa.data.model.User;
+import com.example.ea2soa.ui.MainActivity;
 import com.example.ea2soa.ui.login.LoginActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -26,19 +33,14 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private EditText password_repeat;
+    private TextView error_en_register;
+    private Button registerButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-    }
 
-    public void goBackToLoginActivity(View view) {
-        finish();
-    }
-
-    public void register(View view){
-        System.out.println("llegue aca");
         nombre = (EditText)findViewById(R.id.nombre);
         apellido = (EditText)findViewById(R.id.apellido);
         dni = (EditText)findViewById(R.id.dni);
@@ -46,7 +48,15 @@ public class RegisterActivity extends AppCompatActivity {
         username = (EditText)findViewById(R.id.username);
         password = (EditText)findViewById(R.id.password);
         password_repeat = (EditText)findViewById(R.id.password_repeat);
-        System.out.println("llegue aca2");
+        error_en_register = (TextView) findViewById(R.id.error_en_register);
+        registerButton = (Button) findViewById(R.id.register);
+    }
+
+    public void goBackToLoginActivity(View view) {
+        finish();
+    }
+
+    public void register(View view){
         cleanErrors();
 
 //        todo ver esto
@@ -74,7 +84,27 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        RegisterService registerService = new RegisterService(this);
+        registerButton.setEnabled(false);
+        RegisterService registerService = new RegisterService(this){
+            @Override
+            protected void onFailedRegister(String errorMsg) {
+                super.onFailedRegister(errorMsg);
+
+                Log.e("RegisterAsync",errorMsg);
+//                todo : mostrar error en pantalla
+                error_en_register.setText(errorMsg);
+                registerButton.setEnabled(true);
+            }
+
+            @Override
+            protected void onRegistered() {
+                super.onRegistered();
+
+                Log.i("registerAsync","registered ok");
+                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(intent);
+            }
+        };
         registerService.registerUser(user);
 
     }
@@ -87,6 +117,7 @@ public class RegisterActivity extends AppCompatActivity {
         username.setError(null);
         password.setError(null);
         password_repeat.setError(null);
+        error_en_register.setText("");
     }
 
     private void showErrors(HashMap<String,String> errors){

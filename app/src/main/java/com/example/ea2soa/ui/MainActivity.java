@@ -1,11 +1,11 @@
-package com.example.ea2soa;
+package com.example.ea2soa.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.ea2soa.data.LoginRepository;
+import com.example.ea2soa.R;
 import com.example.ea2soa.data.model.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView userText = findViewById(R.id.nombreUsuario);
 
-        User user = LoginRepository.getInstance(null).getLoggedInUser();
+//        User user = LoginRepository.getInstance(null).getLoggedInUser();
 
-        if(user != null){
-//            userText.setText();
-        }
+//        if(user != null){
+////            userText.setText();
+//        }
     }
 }
