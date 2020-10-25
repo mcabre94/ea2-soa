@@ -10,6 +10,8 @@ package com.example.ea2soa.data;
 import com.example.ea2soa.ui.register.RegisterActivity;
 import com.example.ea2soa.data.model.User;
 
+import org.json.JSONObject;
+
 public class RegisterService {
 
     RegisterActivity registerActivity;
@@ -24,12 +26,12 @@ public class RegisterService {
             protected void onFailedRegister(String errorMsg) { RegisterService.this.onFailedRegister(errorMsg); }
 
             @Override
-            protected void onRegistered() { RegisterService.this.onRegistered(); }
+            protected void onRegistered(JSONObject response) { RegisterService.this.onRegistered(response); }
         };
         asyncTask.execute(user);
     }
 
 
-    protected void onRegistered(){}
+    protected void onRegistered(JSONObject response){}
     protected void onFailedRegister(String errorMsg){}
 }

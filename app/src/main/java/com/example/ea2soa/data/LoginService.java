@@ -2,22 +2,22 @@ package com.example.ea2soa.data;
 
 import com.example.ea2soa.data.model.User;
 
+import org.json.JSONObject;
+
 public abstract class LoginService {
 
-    public void login(String user, String password){
+    public void login(User user){
         LoginAsyncTask loginAsyncTask = new LoginAsyncTask() {
             @Override
             protected void onFailedLogin(String errorMsg) { LoginService.this.onFailedLogin(errorMsg); }
 
             @Override
-            protected void onLoggedIn() {
-                 LoginService.this.onLoggedIn();
-            }
+            protected void onLoggedIn(JSONObject response) { LoginService.this.onLoggedIn(response); }
         };
 
-        loginAsyncTask.execute(new User(user,password));
+        loginAsyncTask.execute(user);
     }
 
-    protected void onLoggedIn(){}
+    protected void onLoggedIn(JSONObject response){}
     protected void onFailedLogin(String errorMsg){}
 }

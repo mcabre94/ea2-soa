@@ -22,19 +22,13 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public abstract class RegisterAsyncTask extends AsyncTask<User, Void, Boolean> {
+public abstract class RegisterAsyncTask extends AsyncTask<User, Void, JSONObject> {
     String url = "http://so-unlam.net.ar/api/api/register";
-    String env = "TEST";
+    String env = "PROD";
     String errorMsg = null;
-//
-//    RegisterActivity registerActivity;
-//
-//    public RegisterAsyncTask(RegisterActivity registerActivity){
-//        this.registerActivity = registerActivity;
-//    }
 
     @Override
-    protected Boolean doInBackground(User[] users) {
+    protected JSONObject doInBackground(User[] users) {
         try {
             User user = users[0];
             URL url = new URL(this.url);
@@ -66,45 +60,31 @@ public abstract class RegisterAsyncTask extends AsyncTask<User, Void, Boolean> {
                 response = obtainResponse(urlConnection.getErrorStream());
             }
 
-            if((Boolean) response.get("success") == true){
-                LoggedInData.getInstance().setToken(response.get("token").toString());
-                LoggedInData.getInstance().setToken(response.get("token_refresh").toString());
-                return true;
-            }else{
-                errorMsg = response.get("msg").toString();
-                return false;
-            }
+//            urlConnection.disconnect(); //todo ver si hay que hacer esto
+
+            return response;
         }catch (Exception e) {
             Log.e("registerAsync",e.toString());
             e.printStackTrace();
-
-            return false;
+            return null;
         }
     }
-
-//    @Override
-//    protected void onPreExecute() {
-//        super.onPreExecute();
-//
-//        Button registerButton = (Button) registerActivity.findViewById(R.id.register);
-//        registerButton.setEnabled(false);
-//    }
 
     @Override
-    protected void onPostExecute(Boolean result) {
-        super.onPostExecute(result);
-        Log.i("registerAsync",result.toString());
+    protected void onPostExecute(JSONObject response) {
+        super.onPostExecute(response);
+        Log.i("registerAsync",response.toString());
 
-        if(result == true){
-            onRegistered();
-        }else{
-            onFailedRegister(errorMsg);
+        try {
+            if(response != null && (Boolean) response.get("success") == true){
+                onRegistered(response);
+            }else if(response != null){
+                onFailedRegister(response.get("msg").toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
-
-    protected abstract void onFailedRegister(String errorMsg);
-
-    protected abstract void onRegistered();
 
     private JSONObject obtainResponse(InputStream stream) throws IOException, JSONException {
         BufferedReader br = new BufferedReader(new InputStreamReader(stream, "utf-8"));
@@ -132,4 +112,8 @@ public abstract class RegisterAsyncTask extends AsyncTask<User, Void, Boolean> {
 
         return data;
     }
+
+    protected abstract void onFailedRegister(String errorMsg);
+
+    protected abstract void onRegistered(JSONObject response);
 }

@@ -17,19 +17,12 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public abstract class LoginAsyncTask extends AsyncTask<User, Void, Boolean> {
+public abstract class LoginAsyncTask extends AsyncTask<User, Void, JSONObject> {
     String url = "http://so-unlam.net.ar/api/api/login";
-
     String errorMsg = null;
 
-//    RegisterActivity registerActivity;
-//
-//    public LoginAsyncTask(RegisterActivity registerActivity){
-//        this.registerActivity = registerActivity;
-//    }
-
     @Override
-    protected Boolean doInBackground(User[] users) {
+    protected JSONObject doInBackground(User[] users) {
         try {
             User user = users[0];
             URL url = new URL(this.url);
@@ -58,38 +51,30 @@ public abstract class LoginAsyncTask extends AsyncTask<User, Void, Boolean> {
             }else{
                 response = obtainResponse(urlConnection.getErrorStream()); //todo hacer lo mismo en register
             }
-
-            if((Boolean) response.get("success") == true){
-                LoggedInData.getInstance().setToken(response.get("token").toString());
-                LoggedInData.getInstance().setToken(response.get("token_refresh").toString());
-                return true;
-            }else{
-                errorMsg = response.get("msg").toString();
-                return false;
-            }
+            return response;
         }catch (Exception e) {
             Log.e("LoginAsync",e.toString());
             e.printStackTrace();
 
-            return false;
+            return null;
         }
     }
 
     @Override
-    protected void onPostExecute(Boolean result) {
-        super.onPostExecute(result);
-        Log.i("LoginAsync",result.toString());
+    protected void onPostExecute(JSONObject response) {
+        super.onPostExecute(response);
+        Log.i("LoginAsync",response.toString());
 
-        if(result == true){
-            onLoggedIn();
-        }else{
-            onFailedLogin(errorMsg);
+        try {
+            if(response != null && (Boolean) response.get("success") == true){
+                onLoggedIn(response);
+            }else if(response != null){
+                onFailedLogin(response.get("msg").toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
-
-    protected abstract void onFailedLogin(String errorMsg);
-
-    protected abstract void onLoggedIn();
 
     private JSONObject obtainResponse(InputStream stream) throws IOException, JSONException {
         BufferedReader br = new BufferedReader(new InputStreamReader(stream));
@@ -114,4 +99,8 @@ public abstract class LoginAsyncTask extends AsyncTask<User, Void, Boolean> {
 
         return data;
     }
+
+    protected abstract void onFailedLogin(String errorMsg);
+
+    protected abstract void onLoggedIn(JSONObject response);
 }

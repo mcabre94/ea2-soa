@@ -44,7 +44,7 @@ public class User {
         this.password = password;
         this.password_repeat = password_repeat;
 
-        System.out.println("q ondaaaaa2");
+//        System.out.println("q ondaaaaa2");
     }
 
     public User(String nombre, String apellido, Integer dni, Integer comision, String username) {

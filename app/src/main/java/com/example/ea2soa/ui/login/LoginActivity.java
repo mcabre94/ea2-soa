@@ -11,80 +11,124 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.ea2soa.data.NetworkService;
+import com.example.ea2soa.data.RegisterEventService;
+import com.example.ea2soa.data.model.LoggedInData;
+import com.example.ea2soa.data.model.User;
 import com.example.ea2soa.ui.MainActivity;
 import com.example.ea2soa.R;
 import com.example.ea2soa.ui.register.RegisterActivity;
 import com.example.ea2soa.data.LoginService;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class LoginActivity extends AppCompatActivity {
 
     private LoginService loginService;
+    private User user;
+    private EditText usernameEditText;
+    private EditText passwordEditText;
+    private Button loginButton;
+    private TextView errorTextView;
+    private Button verificarInternetButton;
+    private RegisterEventService registerEventService;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        final EditText usernameEditText = findViewById(R.id.username);
-        final EditText passwordEditText = findViewById(R.id.password);
-        final Button loginButton = findViewById(R.id.login);
-        final TextView errorTextView = findViewById(R.id.error_en_login);
+        usernameEditText = findViewById(R.id.username);
+        passwordEditText = findViewById(R.id.password);
+        loginButton = findViewById(R.id.login);
+        errorTextView = findViewById(R.id.error_en_login);
+        verificarInternetButton = findViewById(R.id.verificar_internet);
 
-        loginService = new LoginService() {
+        loginService = createLoginService();
+
+        registerEventService = createRegisterEventService();
+
+        loginButton.setOnClickListener(v -> {
+            loginButton.setEnabled(false);
+            user = new User(
+                    usernameEditText.getText().toString(),
+                    passwordEditText.getText().toString()
+            );
+            loginService.login(user);
+        });
+
+        if(!NetworkService.isOnline(this)){
+            loginButton.setEnabled(false);
+            verificarInternetButton.setVisibility(View.VISIBLE);
+            errorTextView.setText("No posee conexión a internet");
+
+            verificarInternetButton.setOnClickListener(v -> {
+                if(NetworkService.isOnline(this)){
+                    verificarInternetButton.setVisibility(View.GONE);
+                    loginButton.setEnabled(true);
+                    errorTextView.setText("");
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i("REGISTEREVENT","stopeo la activity");
+        registerEventService.unregisterReceiver(this);
+    }
+
+    private RegisterEventService createRegisterEventService() {
+        return new RegisterEventService(LoginActivity.this);
+    }
+
+    private LoginService createLoginService() {
+        return new LoginService() {
             @Override
-            protected void onLoggedIn() {
-                super.onLoggedIn();
+            protected void onLoggedIn(JSONObject response) {
+                super.onLoggedIn(response);
+
+                try {
+                    LoggedInData.getInstance().setToken(response.get("token").toString());
+                    LoggedInData.getInstance().setRefreshToken(response.get("token_refresh").toString());
+                    LoggedInData.getInstance().setUser(user);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 Log.i("Login","logged in");
+
+                try {
+                    registerEventService.registerEvent("TEST","log in","usuario logueado correctamente");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 goToMainActivity();
+
             }
 
             @Override
             protected void onFailedLogin(String errorMsg) {
                 super.onFailedLogin(errorMsg);
 
-                Log.i("Login","Fail log in");
-
                 loginButton.setEnabled(true);
                 errorTextView.setText(errorMsg);
-//                todo : mostrar mensaje de error
             }
         };
-//        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                if (actionId == EditorInfo.IME_ACTION_DONE) {
-//                    loginViewModel.login(
-//                            usernameEditText.getText().toString(),
-//                            passwordEditText.getText().toString()
-//                    );
-//                }
-//                return false;
-//            }
-//        });
-
-        loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                loginButton.setEnabled(false);
-//                loadingProgressBar.setVisibility(View.VISIBLE);
-                loginService.login(
-                        usernameEditText.getText().toString(),
-                        passwordEditText.getText().toString()
-                );
-            }
-        });
     }
 
     private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     public void goToRegisterActivity(View view) {
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
+
 }

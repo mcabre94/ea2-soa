@@ -13,11 +13,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.ea2soa.R;
+import com.example.ea2soa.data.NetworkService;
 import com.example.ea2soa.data.RegisterService;
+import com.example.ea2soa.data.model.LoggedInData;
 import com.example.ea2soa.data.model.User;
 import com.example.ea2soa.ui.MainActivity;
 import com.example.ea2soa.ui.login.LoginActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
@@ -35,6 +39,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText password_repeat;
     private TextView error_en_register;
     private Button registerButton;
+    private Button verificarInternetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +55,21 @@ public class RegisterActivity extends AppCompatActivity {
         password_repeat = (EditText)findViewById(R.id.password_repeat);
         error_en_register = (TextView) findViewById(R.id.error_en_register);
         registerButton = (Button) findViewById(R.id.register);
+        verificarInternetButton = (Button) findViewById(R.id.verificar_internet);
+
+        if(!NetworkService.isOnline(this)){
+            registerButton.setEnabled(false);
+            verificarInternetButton.setVisibility(View.VISIBLE);
+            error_en_register.setText("No posee conexión a internet");
+
+            verificarInternetButton.setOnClickListener(v -> {
+                if(NetworkService.isOnline(this)){
+                    verificarInternetButton.setVisibility(View.GONE);
+                    registerButton.setEnabled(true);
+                    error_en_register.setText("");
+                }
+            });
+        }
     }
 
     public void goBackToLoginActivity(View view) {
@@ -59,17 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
     public void register(View view){
         cleanErrors();
 
-//        todo ver esto
-//        if (dni.getText().toString().isEmpty()) {
-//            dni.setError("Debe completar campo dni");
-//            return;
-//        }
-//        if (comision.getText().toString().isEmpty()) {
-//            comision.setError("Debe completar campo comision");
-//            return;
-//        }
-
-        User user = new User(
+        final User user = new User(
             nombre.getText().toString(),
             apellido.getText().toString(),
             dni.getText().toString(),
@@ -78,7 +88,7 @@ public class RegisterActivity extends AppCompatActivity {
             password.getText().toString(),
             password_repeat.getText().toString()
         );
-        System.out.println("aca toy");
+//        System.out.println("aca toy");
         if(!user.isValid()){
             showErrors(user.getErrors());
             return;
@@ -97,12 +107,21 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            protected void onRegistered() {
-                super.onRegistered();
+            protected void onRegistered(JSONObject response) {
+                super.onRegistered(response);
+
+                try {
+                    LoggedInData.getInstance().setToken(response.get("token").toString());
+                    LoggedInData.getInstance().setRefreshToken(response.get("token_refresh").toString());
+                    LoggedInData.getInstance().setUser(user);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 Log.i("registerAsync","registered ok");
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         };
         registerService.registerUser(user);

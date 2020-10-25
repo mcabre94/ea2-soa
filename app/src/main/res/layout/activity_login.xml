@@ -120,4 +120,16 @@
         android:onClick="goToRegisterActivity"
         android:clickable="true"/>
 
+    <Button
+        android:id="@+id/verificar_internet"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Recargar"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/error_en_login" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
