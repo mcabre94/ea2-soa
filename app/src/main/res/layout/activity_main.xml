@@ -49,4 +49,132 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
+
+    <Spinner
+        android:id="@+id/sensores"
+        style="@android:style/Widget.Material.Spinner.Underlined"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:entries="@array/sensores_array"
+        android:spinnerMode="dropdown"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bateria_card_view" />
+
+    <LinearLayout
+        android:id="@+id/container_acelerometro"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:elevation="30dp"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sensores">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:clipChildren="false"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Valor X :" />
+
+            <TextView
+                android:id="@+id/valorX"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:text="25" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:clipChildren="false"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Valor Y :" />
+
+            <TextView
+                android:id="@+id/valorY"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:text="25" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:clipChildren="false"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Valor Z :" />
+
+            <TextView
+                android:id="@+id/valorZ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:text="25" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/container_sensor_luz"
+        android:layout_width="360dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:elevation="30dp"
+        android:orientation="vertical"
+        android:paddingLeft="5dp"
+        android:paddingTop="10dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sensores">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:clipChildren="false"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textViewIluminacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="Valor de iluminación :" />
+            <TextView
+                android:id="@+id/valorIluminacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="false"
+                android:text="25" />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

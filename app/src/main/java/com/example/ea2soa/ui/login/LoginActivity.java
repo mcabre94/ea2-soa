@@ -76,7 +76,6 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        Log.i("REGISTEREVENT","stopeo la activity");
         registerEventService.unregisterReceiver(this);
     }
 
@@ -98,11 +97,9 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Log.i("Login","logged in");
-
                 try {
-                    registerEventService.registerEvent("TEST","log in","usuario logueado correctamente");
-                } catch (JSONException e) {
+                    registerEventService.registerEvent(getResources().getString(R.string.enviroment),"log in","usuario logueado correctamente");
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 

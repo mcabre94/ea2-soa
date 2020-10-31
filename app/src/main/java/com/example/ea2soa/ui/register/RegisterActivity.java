@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.ea2soa.R;
 import com.example.ea2soa.data.NetworkService;
+import com.example.ea2soa.data.RegisterEventService;
 import com.example.ea2soa.data.RegisterService;
 import com.example.ea2soa.data.model.LoggedInData;
 import com.example.ea2soa.data.model.User;
@@ -41,11 +42,14 @@ public class RegisterActivity extends AppCompatActivity {
     private Button registerButton;
     private Button verificarInternetButton;
 
+    private RegisterEventService registerEventService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        registerEventService = new RegisterEventService(this);
         nombre = (EditText)findViewById(R.id.nombre);
         apellido = (EditText)findViewById(R.id.apellido);
         dni = (EditText)findViewById(R.id.dni);
@@ -118,8 +122,15 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                try {
+                    registerEventService.registerEvent(getResources().getString(R.string.enviroment),"register","Se registró un nuevo usuario correctamente");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 Log.i("registerAsync","registered ok");
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+
                 startActivity(intent);
                 finish();
             }

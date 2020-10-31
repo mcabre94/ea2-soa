@@ -15,6 +15,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An {@link IntentService} subclass for handling asynchronous task requests in
@@ -27,6 +29,8 @@ public class HTTPRequestService extends IntentService {
     private String endpoint;
     private String method;
     private String json;
+    private HashMap<String,String> requestProperties;
+
 
     public HTTPRequestService() {
         super("HTTPRequestService");
@@ -34,22 +38,18 @@ public class HTTPRequestService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.i("REGISTEREVENT","llegue al intent");
         endpoint = intent.getExtras().getString("endpoint");
         method = intent.getExtras().getString("method");
         json = intent.getExtras().getString("jsonData");
-        Log.i("REGISTEREVENT",json);
-        Log.i("REGISTEREVENT","estoy aca?");
+        requestProperties = (HashMap<String, String>) intent.getSerializableExtra("requestProperties");
+
+        Log.i("REGISTEREVENT",requestProperties.toString());
+
         try{
-            Log.i("REGISTEREVENT",json);
-            Log.i("REGISTEREVENT",endpoint);
-            Log.i("REGISTEREVENT",method);
             JSONObject response = makeRequest();
 
             Intent responseIntent = new Intent("com.ea2soa.intentservice.intent.action.RESPUESTA_OPERACION");
             responseIntent.putExtra("response",response.toString());
-
-            Log.i("REGISTEREVENT",response.toString());
 
             sendBroadcast(responseIntent);
         }catch (Exception e){
@@ -58,14 +58,17 @@ public class HTTPRequestService extends IntentService {
     }
 
     private JSONObject makeRequest() throws Exception{
-        Log.i("REGISTEREVENT",json);
-        Log.i("REGISTEREVENT",endpoint);
-        Log.i("REGISTEREVENT",method);
         URL url = new URL(endpoint);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod(method);
         urlConnection.setRequestProperty("Content-Type", "application/json");
         urlConnection.setRequestProperty("Accept", "application/json");
+        if(requestProperties != null){
+            for (Map.Entry<String, String> entry : requestProperties.entrySet()) {
+                urlConnection.setRequestProperty(entry.getKey(),entry.getValue());
+            }
+        }
+
         urlConnection.setDoOutput(true);
 
         Log.i("REGISTEREVENT",json);
@@ -73,8 +76,6 @@ public class HTTPRequestService extends IntentService {
         OutputStreamWriter wr= new OutputStreamWriter(urlConnection.getOutputStream());
         wr.write(json);
         wr.close();
-
-        Log.i("REGISTEREVENT",urlConnection.getHeaderFields().toString());
 
         urlConnection.connect();
 
@@ -86,7 +87,6 @@ public class HTTPRequestService extends IntentService {
         }else{
             response = obtainResponse(urlConnection.getErrorStream()); //todo hacer lo mismo en register
         }
-
         Log.i("REGISTEREVENT",response.toString());
         return response;
     }
@@ -100,8 +100,6 @@ public class HTTPRequestService extends IntentService {
         }
 
         JSONObject json = new JSONObject(response.toString());
-
-        Log.i("REGISTEREVENT",json.toString());
         return json;
     }
 }

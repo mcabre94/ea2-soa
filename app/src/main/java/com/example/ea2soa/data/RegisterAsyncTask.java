@@ -1,5 +1,6 @@
 package com.example.ea2soa.data;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -24,8 +25,12 @@ import java.net.URL;
 
 public abstract class RegisterAsyncTask extends AsyncTask<User, Void, JSONObject> {
     String url = "http://so-unlam.net.ar/api/api/register";
-    String env = "PROD";
+    String env;
     String errorMsg = null;
+
+    public RegisterAsyncTask(String env){
+        this.env = env;
+    }
 
     @Override
     protected JSONObject doInBackground(User[] users) {

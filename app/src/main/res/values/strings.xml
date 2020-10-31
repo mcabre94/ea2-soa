@@ -15,4 +15,9 @@
     <string name="prompt_nombre" >Nombre</string>
     <string name="prompt_apellido" >Apellido</string>
     <string name="prompt_dni" >DNI</string>
+    <string-array name="sensores_array">
+        <item>Acelerómetro</item>
+        <item>Sensor Luz</item>
+    </string-array>
+    <string name="enviroment">PROD</string>
 </resources>
