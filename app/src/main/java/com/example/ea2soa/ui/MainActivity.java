@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.example.ea2soa.R;
+import com.example.ea2soa.data.RefreshTokenService;
 import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity{
     private TabAdapter adapter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private RefreshTokenService refreshTokenService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,5 +30,15 @@ public class MainActivity extends AppCompatActivity{
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
+        refreshTokenService = new RefreshTokenService(this);
+        refreshTokenService.startRefreshTokenAlarm();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        refreshTokenService.stopRefreshTokenAlarm();
     }
 }

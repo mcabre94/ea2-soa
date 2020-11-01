@@ -30,6 +30,7 @@ public abstract class HTTPRequestService extends IntentService {
     protected String method;
     protected String json;
     protected HashMap<String,String> requestProperties;
+    protected String broadcastCode = "com.ea2soa.intentservice.intent.action.RESPUESTA_OPERACION";
 
 
     public HTTPRequestService() {
@@ -42,6 +43,10 @@ public abstract class HTTPRequestService extends IntentService {
         method = intent.getExtras().getString("method");
         json = intent.getExtras().getString("jsonData");
         requestProperties = (HashMap<String, String>) intent.getSerializableExtra("requestProperties");
+        String broadcastCode = intent.getExtras().getString("broadcastCode");
+        if(broadcastCode != null){
+            this.broadcastCode = broadcastCode;
+        }
     }
 
     protected HttpURLConnection makeRequest() throws Exception{

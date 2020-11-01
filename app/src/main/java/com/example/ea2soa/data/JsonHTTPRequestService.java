@@ -24,11 +24,11 @@ public class JsonHTTPRequestService extends HTTPRequestService {
             if(connection.getResponseCode() < 400){
                 response = obtainResponse(connection.getInputStream());
             }else{
-                response = obtainResponse(connection.getErrorStream()); //todo hacer lo mismo en register
+                response = obtainResponse(connection.getErrorStream());
             }
             Log.i("REGISTEREVENT",response.toString());
 
-            Intent responseIntent = new Intent("com.ea2soa.intentservice.intent.action.RESPUESTA_OPERACION");
+            Intent responseIntent = new Intent(this.broadcastCode);
             responseIntent.putExtra("response",response.toString());
 
             sendBroadcast(responseIntent);
