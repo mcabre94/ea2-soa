@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.ea2soa.R;
 import com.example.ea2soa.data.RegisterEventService;
@@ -38,11 +39,12 @@ import org.json.JSONObject;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-public class TabEventosFragment extends Fragment {
+public class TabEventosFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     TableLayout tabla;
+    SwipeRefreshLayout swipeRefreshLayout;
     JSONObject jsonObject;
     View view;
-    SharedPreferences.OnSharedPreferenceChangeListener sharedPreferenceChangeListener;
+    SharedPreferences sharedPreferences;
 
     @Nullable
     @Override
@@ -50,16 +52,11 @@ public class TabEventosFragment extends Fragment {
         view = inflater.inflate(R.layout.eventos_fragment,container,false);
 
         tabla = view.findViewById(R.id.tabla_eventos);
+        swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
-        sharedPreferenceChangeListener = new SharedPreferences.OnSharedPreferenceChangeListener() {
-            @Override
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                updateTable(sharedPreferences);
-            }
-        };
-
-        getContext().getApplicationContext().getSharedPreferences("eventos",Context.MODE_PRIVATE).registerOnSharedPreferenceChangeListener(sharedPreferenceChangeListener);
-        updateTable(getContext().getApplicationContext().getSharedPreferences("eventos",Context.MODE_PRIVATE));
+        sharedPreferences = getContext().getSharedPreferences("eventos",Context.MODE_PRIVATE);
+        updateTable();
 
         return view;
     }
@@ -67,15 +64,17 @@ public class TabEventosFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        swipeRefreshLayout.setOnRefreshListener(null);
     }
 
-    public void updateTable(SharedPreferences sharedPreferences) {
+    public void updateTable() {
         String datosGuardados = sharedPreferences.getString("datosEventosGuardados","{eventos : []}");
         try {
             jsonObject = new JSONObject(datosGuardados);
             JSONArray eventos = jsonObject.getJSONArray("eventos");
 
             if(eventos!=null && eventos.length()>0){
+                tabla.removeViews(1,tabla.getChildCount()-1);
                 for (int i = (eventos.length() - 1); i >= 0; i--) {
                     JSONObject evento = eventos.optJSONObject(i);
                     String typeEvent = evento.getString("type_event");
@@ -103,5 +102,11 @@ public class TabEventosFragment extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        this.updateTable();
+        swipeRefreshLayout.setRefreshing(false);
     }
 }

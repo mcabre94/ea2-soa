@@ -2,6 +2,7 @@ package com.example.ea2soa.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +17,14 @@ import androidx.fragment.app.Fragment;
 import com.example.ea2soa.data.GenerarQrService;
 import com.example.ea2soa.R;
 import com.example.ea2soa.data.GenerarQrServiceCallbackInterface;
+import com.example.ea2soa.data.RegisterEventService;
 
 public class TabQrFragment extends Fragment {
     EditText textoQR;
     Button buttonGenerarQR;
     ImageView qr_imagen;
+    RegisterEventService registerEventService;
+    GenerarQrService generarQrService;
 
     @Nullable
     @Override
@@ -31,14 +35,25 @@ public class TabQrFragment extends Fragment {
         buttonGenerarQR = view.findViewById(R.id.generar_qr);
         qr_imagen = view.findViewById(R.id.imagen_qr);
 
+        registerEventService = new RegisterEventService(getContext());
+
         buttonGenerarQR.setOnClickListener(v -> {
-            GenerarQrService generarQrService = new GenerarQrService(view.getContext());
+            Log.i("clicklistener","clicked");
+            generarQrService = new GenerarQrService(view.getContext());
             buttonGenerarQR.setEnabled(false);
             generarQrService.registerReceiver(new GenerarQrServiceCallbackInterface() {
                 @Override
                 public void handle(Bitmap image) {
                     buttonGenerarQR.setEnabled(true);
-                    qr_imagen.setImageBitmap(image);
+                    if(image != null){
+                        qr_imagen.setImageBitmap(image);
+
+                        try {
+                            registerEventService.registerEvent(getResources().getString(R.string.enviroment),"qr","qr generado");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
             });
             generarQrService.generarQR(textoQR.getText().toString());
@@ -46,5 +61,12 @@ public class TabQrFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        buttonGenerarQR.setOnClickListener(null);
     }
 }

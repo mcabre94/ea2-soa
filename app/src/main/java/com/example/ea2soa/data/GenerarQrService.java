@@ -30,8 +30,12 @@ public class GenerarQrService {
             @Override
             public void onReceive(Context context, Intent intent) {
                 byte[] byteArray = intent.getByteArrayExtra("response");
-                Bitmap qr = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
-                callback.handle(qr);
+                if(byteArray != null){
+                    Bitmap qr = BitmapFactory.decodeByteArray(byteArray,0,byteArray.length);
+                    callback.handle(qr);
+                }
+                callback.handle(null);
+                context.unregisterReceiver(receiver);
             }
         };
         context.registerReceiver(receiver,filtro);

@@ -3,7 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/swipe_refresh_layout">
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,8 +36,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_column="0"
-                        android:paddingLeft="7dp"
-                        android:paddingRight="7dp"
                         android:text=" Hora "></TextView>
 
                     <TextView
@@ -48,10 +51,10 @@
             </TableLayout>
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
 
-
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

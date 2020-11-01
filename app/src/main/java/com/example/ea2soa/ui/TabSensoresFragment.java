@@ -53,6 +53,8 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sensores_fragment,container,false);
 
+        ultimoRegistroEventoAcelerometro = null;
+
         sensorManager = (SensorManager) getActivity().getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),sensorManager.SENSOR_DELAY_NORMAL);
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT),sensorManager.SENSOR_DELAY_NORMAL);
