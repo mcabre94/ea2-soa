@@ -18,14 +18,11 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/bateria_card_view"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         app:cardBackgroundColor="#6A6A6A"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -62,7 +59,7 @@
     <Spinner
         android:id="@+id/sensores"
         style="@android:style/Widget.Material.Spinner.Underlined"
-        android:layout_width="380dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bateria_card_view"
         android:layout_marginTop="20dp"
@@ -74,10 +71,9 @@
 
     <LinearLayout
         android:id="@+id/container_acelerometro"
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:elevation="30dp"
         android:orientation="vertical"
         android:paddingLeft="5dp"
         android:paddingTop="10dp"
@@ -153,9 +149,10 @@
                 android:text="25" />
         </LinearLayout>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/container_sensor_luz"
-        android:layout_width="360dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:elevation="30dp"
@@ -166,6 +163,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sensores">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -179,6 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
                 android:text="Valor de iluminación :" />
+
             <TextView
                 android:id="@+id/valorIluminacion"
                 android:layout_width="wrap_content"

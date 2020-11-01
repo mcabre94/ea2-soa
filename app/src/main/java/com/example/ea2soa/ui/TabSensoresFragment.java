@@ -34,6 +34,7 @@ import static android.content.Context.SENSOR_SERVICE;
 public class TabSensoresFragment extends Fragment implements SensorEventListener {
     private BroadcastReceiver infoBateriaReceiver;
     private TextView nivelBateria;
+    private TextView labelBateria;
     private CardView bateriaCardView;
     private Spinner selectSensor;
     private LinearLayout containerAcelerometro;
@@ -60,6 +61,7 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
         sensorManager.registerListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT),sensorManager.SENSOR_DELAY_NORMAL);
 
         nivelBateria = view.findViewById(R.id.nivel_bateria);
+        labelBateria = view.findViewById(R.id.bateria);
         bateriaCardView = view.findViewById(R.id.bateria_card_view);
         selectSensor = view.findViewById(R.id.sensores);
 
@@ -93,10 +95,17 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
 
                 if(bateria < 30){
                     bateriaCardView.setCardBackgroundColor(Color.RED);
+                    nivelBateria.setTextColor(Color.WHITE);
+                    labelBateria.setTextColor(Color.WHITE);
                 }else if (bateria < 50){
                     bateriaCardView.setCardBackgroundColor(Color.YELLOW);
+                    nivelBateria.setTextColor(Color.BLACK);
+                    labelBateria.setTextColor(Color.BLACK);
                 }else{
                     bateriaCardView.setCardBackgroundColor(Color.GREEN);
+                    nivelBateria.setTextColor(Color.WHITE);
+                    labelBateria.setTextColor(Color.WHITE);
+
                 }
             }
         };
