@@ -41,8 +41,6 @@ public class RegisterEventService {
                 if(response != null){
                     try{
                         JSONObject responseJSON = new JSONObject(response);
-                        //todo, ver que devuelve una vez vencido el token, hay que enviar la peticion de que refresque el token
-                        //todo, y además hay que volver a enviar la request de registrar evento
 
                         if(callback != null){
                             callback.handle(responseJSON);

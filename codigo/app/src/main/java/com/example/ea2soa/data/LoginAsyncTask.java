@@ -33,17 +33,12 @@ public abstract class LoginAsyncTask extends AsyncTask<User, Void, JSONObject> {
             urlConnection.setDoOutput(true);
 
             JSONObject data = obtainJsonObject(user);
-            Log.i("LoginAsync",data.toString());
 
             OutputStreamWriter wr= new OutputStreamWriter(urlConnection.getOutputStream());
             wr.write(data.toString());
             wr.close();
 
-            Log.i("LoginAsync",urlConnection.getHeaderFields().toString());
-
             urlConnection.connect();
-
-            Log.i("LoginAsync",String.valueOf(urlConnection.getResponseCode()));
 
             JSONObject response;
             if(urlConnection.getResponseCode() < 400){
@@ -53,7 +48,6 @@ public abstract class LoginAsyncTask extends AsyncTask<User, Void, JSONObject> {
             }
             return response;
         }catch (Exception e) {
-            Log.e("LoginAsync",e.toString());
             e.printStackTrace();
 
             return null;
@@ -63,7 +57,6 @@ public abstract class LoginAsyncTask extends AsyncTask<User, Void, JSONObject> {
     @Override
     protected void onPostExecute(JSONObject response) {
         super.onPostExecute(response);
-        Log.i("LoginAsync",response.toString());
 
         try {
             if(response != null && (Boolean) response.get("success") == true){
@@ -84,11 +77,7 @@ public abstract class LoginAsyncTask extends AsyncTask<User, Void, JSONObject> {
             response.append(responseLine.trim());
         }
 
-        Log.i("LoginAsync",response.toString());
-
         JSONObject json = new JSONObject(response.toString());
-
-        Log.i("LoginAsync",json.toString());
         return json;
     }
 

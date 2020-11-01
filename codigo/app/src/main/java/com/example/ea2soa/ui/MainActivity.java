@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.i("bateria","arranca oncreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -40,7 +39,6 @@ public class MainActivity extends AppCompatActivity{
     @Override
     protected void onStop() {
         super.onStop();
-
         refreshTokenService.stopRefreshTokenAlarm();
     }
 }

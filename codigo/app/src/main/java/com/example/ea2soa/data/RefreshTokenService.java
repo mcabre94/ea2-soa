@@ -17,7 +17,6 @@ import java.util.HashMap;
 
 public class RefreshTokenService {
     AlarmManager alarmManager;
-    //    Long intervaloTiempo = (long) 30000; // 30segundos en milisegundos
     Long intervaloTiempo = (long) (1000 * 60 * 20); // 20 minutos representados en milisegundos
     Context context;
     String endpoint = "http://so-unlam.net.ar/api/api/refresh";

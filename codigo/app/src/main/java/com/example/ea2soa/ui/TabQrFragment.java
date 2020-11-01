@@ -38,7 +38,6 @@ public class TabQrFragment extends Fragment {
         registerEventService = new RegisterEventService(getContext());
 
         buttonGenerarQR.setOnClickListener(v -> {
-            Log.i("clicklistener","clicked");
             generarQrService = new GenerarQrService(view.getContext());
             buttonGenerarQR.setEnabled(false);
             qr_imagen.setImageBitmap(null);
@@ -67,7 +66,6 @@ public class TabQrFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
         buttonGenerarQR.setOnClickListener(null);
     }
 }

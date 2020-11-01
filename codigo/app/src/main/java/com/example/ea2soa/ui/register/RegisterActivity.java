@@ -92,7 +92,6 @@ public class RegisterActivity extends AppCompatActivity {
             password.getText().toString(),
             password_repeat.getText().toString()
         );
-//        System.out.println("aca toy");
         if(!user.isValid()){
             showErrors(user.getErrors());
             return;
@@ -104,8 +103,6 @@ public class RegisterActivity extends AppCompatActivity {
             protected void onFailedRegister(String errorMsg) {
                 super.onFailedRegister(errorMsg);
 
-                Log.e("RegisterAsync",errorMsg);
-//                todo : mostrar error en pantalla
                 error_en_register.setText(errorMsg);
                 registerButton.setEnabled(true);
             }
@@ -128,7 +125,6 @@ public class RegisterActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                Log.i("registerAsync","registered ok");
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
 
                 startActivity(intent);
@@ -151,12 +147,10 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void showErrors(HashMap<String,String> errors){
-        System.out.println("show errors");
         Iterator it = errors.entrySet().iterator();
         boolean alreadyFocusSetted = false;
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            System.out.println(pair.getKey() + " = " + pair.getValue());
             int resID = getResources().getIdentifier(pair.getKey().toString(), "id", getPackageName());
             EditText editText = (EditText) findViewById(resID);
             editText.setError(pair.getValue().toString());

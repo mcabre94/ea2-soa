@@ -44,19 +44,12 @@ public abstract class RegisterAsyncTask extends AsyncTask<User, Void, JSONObject
             urlConnection.setDoOutput(true);
 
             JSONObject data = obtainJsonObject(user);
-            Log.i("registerAsync",data.toString());
 
             OutputStreamWriter wr= new OutputStreamWriter(urlConnection.getOutputStream());
             wr.write(data.toString());
             wr.close();
 
-            Log.i("registerAsync",urlConnection.getHeaderFields().toString());
-//            Log.i("registerAsync",urlConnection.getContent().toString());
-
             urlConnection.connect();
-
-//            String response = urlConnection.getResponseMessage();
-            Log.i("registerAsync",String.valueOf(urlConnection.getResponseCode()));
 
             JSONObject response;
             if(urlConnection.getResponseCode() < 400){
@@ -65,11 +58,8 @@ public abstract class RegisterAsyncTask extends AsyncTask<User, Void, JSONObject
                 response = obtainResponse(urlConnection.getErrorStream());
             }
 
-//            urlConnection.disconnect(); //todo ver si hay que hacer esto
-
             return response;
         }catch (Exception e) {
-            Log.e("registerAsync",e.toString());
             e.printStackTrace();
             return null;
         }
@@ -78,7 +68,6 @@ public abstract class RegisterAsyncTask extends AsyncTask<User, Void, JSONObject
     @Override
     protected void onPostExecute(JSONObject response) {
         super.onPostExecute(response);
-        Log.i("registerAsync",response.toString());
 
         try {
             if(response != null && (Boolean) response.get("success") == true){
@@ -100,8 +89,6 @@ public abstract class RegisterAsyncTask extends AsyncTask<User, Void, JSONObject
         }
 
         JSONObject json = new JSONObject(response.toString());
-
-        Log.i("registerAsync",json.toString());
         return json;
     }
 

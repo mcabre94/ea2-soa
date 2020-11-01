@@ -77,8 +77,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
 
         registerEventService = new RegisterEventService(getActivity());
 
-        Log.i("MainActivity", LoggedInData.getInstance().getUser().toString());
-
         setSelectSensorListener();
         setBateriaListener();
 
@@ -89,7 +87,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
         infoBateriaReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                Log.i("bateria",String.valueOf(intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0)));
                 Integer bateria = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
                 nivelBateria.setText(String.valueOf(bateria).concat("%"));
 
@@ -142,7 +139,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
     }
 
     private void unregisterSensors() {
-        Log.i("sensores","unregister");
         sensorManager.unregisterListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER));
         sensorManager.unregisterListener(this,sensorManager.getDefaultSensor(Sensor.TYPE_LIGHT));
     }
@@ -155,7 +151,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
             String descriptionEvent = null;
             switch (event.sensor.getType()){
                 case (Sensor.TYPE_ACCELEROMETER):
-//                    Log.i("sensores","acelerometro");
                     Float x = event.values[0];
                     Float y = event.values[1];
                     Float z = event.values[2];
@@ -169,7 +164,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
 
                     if(ultimoRegistroEventoAcelerometro == null || System.currentTimeMillis() - ultimoRegistroEventoAcelerometro > 60000){
                         ultimoRegistroEventoAcelerometro = System.currentTimeMillis();
-                        Log.i("registroEvento","ya paso un minuto (ACELERÓMETRO)");
                         try {
                             registerEventService.registerEvent(env,typeEvent,descriptionEvent);
                         } catch (Exception e) {
@@ -179,7 +173,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
 
                     break;
                 case (Sensor.TYPE_LIGHT):
-//                    Log.i("sensores","luz");
                     Float valorLuz = event.values[0];
                     valorIluminacion.setText(String.format("%.2f lx",valorLuz));
 
@@ -188,7 +181,6 @@ public class TabSensoresFragment extends Fragment implements SensorEventListener
 
                     if(ultimoRegistroEventoLuz == null || System.currentTimeMillis() - ultimoRegistroEventoLuz > 60000){
                         ultimoRegistroEventoLuz = System.currentTimeMillis();
-                        Log.i("registroEvento","ya paso un minuto (LUZ)");
                         try {
                             registerEventService.registerEvent(env,typeEvent,descriptionEvent);
                         } catch (Exception e) {
