@@ -33,9 +33,11 @@ public class TabQrFragment extends Fragment {
 
         buttonGenerarQR.setOnClickListener(v -> {
             GenerarQrService generarQrService = new GenerarQrService(view.getContext());
+            buttonGenerarQR.setEnabled(false);
             generarQrService.registerReceiver(new GenerarQrServiceCallbackInterface() {
                 @Override
                 public void handle(Bitmap image) {
+                    buttonGenerarQR.setEnabled(true);
                     qr_imagen.setImageBitmap(image);
                 }
             });
