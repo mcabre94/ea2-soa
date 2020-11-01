@@ -16,6 +16,12 @@
         <service
             android:name=".data.HTTPRequestService"
             android:exported="false"></service>
+        <service
+            android:name=".data.JsonHTTPRequestService"
+            android:exported="false"></service>
+        <service
+            android:name=".data.ImageHTTPRequestService"
+            android:exported="false"></service>
 
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.MainActivity" />

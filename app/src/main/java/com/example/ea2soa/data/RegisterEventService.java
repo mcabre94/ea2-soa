@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.util.Log;
 
 import com.example.ea2soa.data.model.LoggedInData;
 
@@ -62,8 +63,10 @@ public class RegisterEventService {
 
         HashMap<String,String> requestProperties = new HashMap<String,String>();
         requestProperties.put("Authorization","Bearer "+ LoggedInData.getInstance().getToken());
+        requestProperties.put("Content-Type","application/json");
+        requestProperties.put("Accept", "application/json");
 
-        Intent intent = new Intent(context, HTTPRequestService.class);
+        Intent intent = new Intent(context, JsonHTTPRequestService.class);
         intent.putExtra("jsonData",json.toString());
         intent.putExtra("method",method);
         intent.putExtra("endpoint",endpoint);
