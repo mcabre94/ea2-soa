@@ -1,6 +1,7 @@
 package com.example.ea2soa.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity{
         adapter = new TabAdapter(getSupportFragmentManager());
         adapter.addFragment(new TabSensoresFragment(), "Sensores");
         adapter.addFragment(new TabQrFragment(), "QR");
+        adapter.addFragment(new TabEventosFragment(), "Historial Eventos");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

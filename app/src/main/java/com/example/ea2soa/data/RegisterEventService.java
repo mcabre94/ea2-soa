@@ -4,13 +4,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.ea2soa.data.model.LoggedInData;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 
 public class RegisterEventService {
@@ -75,11 +79,35 @@ public class RegisterEventService {
         this.registerReceiver(null);
 
         context.startService(intent);
+
+        this.registerEventInSharedPreferences(typeEvent,description);
+
     }
 
     public void unregisterReceiver(Context context) {
         if(receiver != null){
             context.unregisterReceiver(receiver);
         }
+    }
+
+    private void registerEventInSharedPreferences(String typeEvent,String description) throws JSONException {
+        JSONObject sharedPreferencesData = new JSONObject();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatted = format1.format(Calendar.getInstance().getTime());
+        sharedPreferencesData.put("hora", formatted);
+        sharedPreferencesData.put("type_event", typeEvent);
+        sharedPreferencesData.put("description", description);
+
+        SharedPreferences sharedPref = context.getApplicationContext().getSharedPreferences("eventos",Context.MODE_PRIVATE);
+        String datosGuardados = sharedPref.getString("datosEventosGuardados","{eventos : []}");
+        JSONObject datosGuardadosJson = new JSONObject(datosGuardados);
+        JSONArray eventos = datosGuardadosJson.getJSONArray("eventos");
+        eventos.put(sharedPreferencesData);
+
+        datosGuardadosJson.put("eventos",eventos);
+
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("datosEventosGuardados", datosGuardadosJson.toString());
+        editor.commit();
     }
 }

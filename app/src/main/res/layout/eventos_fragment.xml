@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:textAlignment="center">
+
+            <TableLayout
+                android:id="@+id/tabla_eventos"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:stretchColumns="0,1"
+                android:shrinkColumns="2">
+
+                <TableRow
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_column="0"
+                        android:paddingLeft="7dp"
+                        android:paddingRight="7dp"
+                        android:text=" Hora "></TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_column="1"
+                        android:text=" Tipo Evento "></TextView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_column="2"
+                        android:text=" Descripcción"></TextView>
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+</RelativeLayout>
