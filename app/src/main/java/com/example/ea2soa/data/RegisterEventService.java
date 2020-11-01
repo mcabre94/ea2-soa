@@ -38,18 +38,19 @@ public class RegisterEventService {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String response = intent.getExtras().getString("response");
-                try{
-                    JSONObject responseJSON = new JSONObject(response);
-                    //todo, ver que devuelve una vez vencido el token, hay que enviar la peticion de que refresque el token
-                    //todo, y además hay que volver a enviar la request de registrar evento
+                if(response != null){
+                    try{
+                        JSONObject responseJSON = new JSONObject(response);
+                        //todo, ver que devuelve una vez vencido el token, hay que enviar la peticion de que refresque el token
+                        //todo, y además hay que volver a enviar la request de registrar evento
 
-                    if(callback != null){
-                        callback.handle(responseJSON);
+                        if(callback != null){
+                            callback.handle(responseJSON);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-
             }
         };
         context.registerReceiver(receiver,filtro);

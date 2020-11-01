@@ -41,6 +41,7 @@ public class TabQrFragment extends Fragment {
             Log.i("clicklistener","clicked");
             generarQrService = new GenerarQrService(view.getContext());
             buttonGenerarQR.setEnabled(false);
+            qr_imagen.setImageBitmap(null);
             generarQrService.registerReceiver(new GenerarQrServiceCallbackInterface() {
                 @Override
                 public void handle(Bitmap image) {

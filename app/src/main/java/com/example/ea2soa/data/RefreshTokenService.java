@@ -62,17 +62,19 @@ public class RefreshTokenService {
             @Override
             public void onReceive(Context context, Intent intent) {
                 String response = intent.getExtras().getString("response");
-                try{
-                    JSONObject responseJSON = new JSONObject(response);
+                if(response != null){
+                    try{
+                        JSONObject responseJSON = new JSONObject(response);
 
-                    if(responseJSON.getBoolean("success") == true){
-                        LoggedInData.getInstance().setToken(responseJSON.getString("token"));
-                        LoggedInData.getInstance().setRefreshToken(responseJSON.getString("token_refresh"));
+                        if(responseJSON.getBoolean("success") == true){
+                            LoggedInData.getInstance().setToken(responseJSON.getString("token"));
+                            LoggedInData.getInstance().setRefreshToken(responseJSON.getString("token_refresh"));
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
                     }
-                }catch (Exception e){
-                    e.printStackTrace();
                 }
-
+                context.unregisterReceiver(receiver);
             }
         };
         context.registerReceiver(receiver,filtro);

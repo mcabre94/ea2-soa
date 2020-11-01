@@ -18,6 +18,13 @@ public class JsonHTTPRequestService extends HTTPRequestService {
     protected void onHandleIntent(Intent intent) {
         super.onHandleIntent(intent);
 
+        if(!NetworkService.isOnline(this)){
+            Intent responseIntent = new Intent(this.broadcastCode);
+            responseIntent.putExtra("responseError","sin conexión a internet");
+            sendBroadcast(responseIntent);
+            return;
+        }
+
         try{
             HttpURLConnection connection = makeRequest();
             JSONObject response;
